@@ -8,7 +8,7 @@ def admin_buttons():
             ],
             [
                 KeyboardButton(text="🗑️ Delete question"),
-                KeyboardButton(text="📃 List questions")
+                KeyboardButton(text="📃 List All questions")
             ]
         ],
         resize_keyboard=True
@@ -42,5 +42,25 @@ def alphabet_keyboard():
             row = []
     if row:
         keyboard.append(row)
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def edit_questions_keyboard(questions):
+    keyboard = []
+
+    for question in questions:
+        keyboard.append([
+            InlineKeyboardButton(text=question["question"],callback_data=f"edit_{question['id']}")
+        ])
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def delete_questions_keyboard(questions):
+    keyboard = []
+    for question in questions:
+        keyboard.append([
+            InlineKeyboardButton(text=question["question"],callback_data=f"delete_{question['id']}" )
+        ])
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

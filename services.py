@@ -79,4 +79,42 @@ async def get_random_question():
     finally:
         await conn.close()
 
- 
+
+async def update_question(question_id, question, answer):
+    conn = await get_connection()
+    try:
+        await conn.execute("""
+        update questions set question = $1, answer = $2
+        where id = $3
+        """, question, answer, question_id)
+    except Exception as er:
+        print("Update question error:", er)
+    finally:
+        await conn.close()
+
+async def get_all_questions():
+    conn = await get_connection()
+    try:
+        questions = await conn.fetch("""
+        select id, question, answer
+        from questions
+        """)
+        return questions
+    except Exception as er:
+        print("Get all questions error:", er)
+    finally:
+        await conn.close()
+
+
+
+async def delete_question(question_id):
+    conn = await get_connection()
+    try:
+        await conn.execute("""
+        delete from questions
+        where id = $1
+        """, question_id)
+    except Exception as er:
+        print("Delete question error:", er)
+    finally:
+        await conn.close()
