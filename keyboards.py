@@ -3,11 +3,11 @@ def admin_buttons():
     return ReplyKeyboardMarkup(
         keyboard=[
             [
-                KeyboardButton(text="➕ Add question",CallbackQuery="add_quetion"),
-                KeyboardButton(text="✏️ Edit question",CallbackQuery="edit_quetion")
+                KeyboardButton(text="➕ Add question"),
+                KeyboardButton(text="✏️ Edit question")
             ],
             [
-                KeyboardButton(text="🗑️ Delete question",CallbackQuery="delete_quetion"),
+                KeyboardButton(text="🗑️ Delete question"),
                 KeyboardButton(text="📃 List questions")
             ]
         ],
@@ -18,8 +18,8 @@ def user_keyboard():
         return ReplyKeyboardMarkup(
         keyboard=[
             [
-                KeyboardButton(text="➕ Add question",CallbackQuery="add_quetion"),
-                KeyboardButton(text="▶️ Play game",CallbackQuery="play_game")
+                KeyboardButton(text="➕ Add question"),
+                KeyboardButton(text="▶️ Play game")
             ],
             [
                 KeyboardButton(text="Help"),

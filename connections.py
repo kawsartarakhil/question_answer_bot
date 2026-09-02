@@ -28,7 +28,7 @@ async def init_tables():
         is_admin boolean default false
         );
 
-        create table if not exists quetions(
+        create table if not exists questions(
         id serial primary key,
         question varchar,
         answer varchar,

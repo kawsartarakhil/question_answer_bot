@@ -11,12 +11,11 @@ async def register(username,tg_id):
         if user:
             print("user already exists")
         else:
-            user=await conn.execute("""
+            await conn.execute("""
         insert into users(username,tg_id,is_admin)
         values
         ($1,$2,False)
         """,username,str(tg_id))
-            return user
     except Exception as er:
         print("registeration error:",er)
 
@@ -38,47 +37,33 @@ async def get_user(username):
     finally:
         await conn.close()
 
-async def add_question(question,answer):
+async def add_question(question,answer,user_id):
     conn=await get_connection()
     try:
         await conn.execute("""
-        insert into questions(question,answer)
+        insert into questions(question,answer,user_id)
         values
-        ($1,$2)
-        """,question,answer)
+        ($1,$2,$3)
+        """,question,answer,user_id)
     except Exception as er:
         print("Add quetion error:",er)
 
     finally:
         await conn.close()
 
-async def get_quetions(tg_id):
+async def get_user_quetions(user_id):
     conn=await get_connection()
     try:
         quetions=await conn.fetch("""
-        select question from quetions
-        where tg_id=$1
-        """,str(tg_id))
+        select question from questions
+        where user_id=$1
+        """,user_id)
         return quetions
     except Exception as er:
         print("Get questions error:",er)
     finally:
         await conn.close()
 
-async def edit_question(q_id):
-    conn=await get_connection()
-    try:
-        question=await conn.fetchrow("""
-        select * from questions
-        where id=$1
-        """,q_id)
-        if not question:
-            print("Question dosen't exists")
-        else:
-            question=await conn.execute("""
-
-    
-            """)
 
 
 
