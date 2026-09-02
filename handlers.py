@@ -55,6 +55,36 @@ async def list_questions_handler(message: types.Message):
         return
     text = "📃 Your questions:\n\n"
     for question in questions:
-        text += f"❓{question['question']}\n"
+        text += f"{question['question']}\n"
 
     await message.answer(text)
+
+@router.message(F.text == "▶️ Play game")
+async def play_game_handler(message: types.Message, state: FSMContext):
+    question = await get_random_question()
+    if not question:
+        await message.answer("You don't have any questions. Add a question first.")
+        return
+
+    await state.set_state(PlayGame.playing)
+    await state.update_data(question=question["question"],answer=question["answer"],guessed_letters=[])
+    await message.answer(f"{question['question']}\n\nGuess the answer:",reply_markup=alphabet_keyboard())
+
+@router.callback_query(PlayGame.playing, F.data.startswith("letter_"))
+async def letter_handler(callback: types.CallbackQuery, state: FSMContext):
+
+    letter = callback.data.replace("letter_", "")
+    data = await state.get_data()
+    guessed_letters = data.get("guessed_letters", [])
+    guessed_letters.append(letter)
+
+    await state.update_data(guessed_letters=guessed_letters)
+    answer = data["answer"].upper()
+    hidden_answer = ""
+    for char in answer:
+        if char in guessed_letters:
+            hidden_answer += char
+        else:
+            hidden_answer += "_"
+    await callback.message.edit_text(f"{data['question']}\n\n{hidden_answer}",reply_markup=alphabet_keyboard())
+    await callback.answer()

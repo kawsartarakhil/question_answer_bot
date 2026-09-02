@@ -65,6 +65,18 @@ async def get_user_quetions(user_id):
         await conn.close()
 
 
+async def get_random_question():
+    conn = await get_connection()
+    try:
+        question = await conn.fetchrow("""
+        select question,answer from questions
+        order by random()
+        """)
 
+        return question
+    except Exception as er:
+        print("Get random question error:", er)
+    finally:
+        await conn.close()
 
  
